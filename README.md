@@ -25,7 +25,7 @@ This project analyzes filtered ECG (electrocardiogram) signals from two patients
 - **Patient 2**: Mean S–T Δ ranged from **~0.335 to 0.390**
 
 ## Visualization
-![ST Windows GIF](https://github.com/hunterbelous/ecg-analysis-project/blob/main/figures/st_windows_side_by_side.gif?raw=true)
+![ST Windows GIF](figures/st_windows_side_by_side.gif)
 
 ## Conclusions
 - Patient 1 consistently shows a **larger S–T voltage difference**, suggesting more pronounced ventricular repolarization. This may reflect relative **ST elevation** or augmented T-wave amplitude, which can occur with increased myocardial workload or ischemic stress.  
