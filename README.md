@@ -1,41 +1,40 @@
-# Adaptive ECG ST-Peak Analysis
+# ECG ST Segment Analysis
 
 ## Project Overview
-This project analyzes ECG data from two patients, detecting S- and T-wave peaks to calculate the S-T voltage difference. The analysis adapts automatically to any ECG dataset, regardless of heart rate or amplitude.
+This project analyzes filtered ECG (electrocardiogram) signals from two patients, focusing on **S–T segment voltage differences** as a marker of ventricular repolarization. The analysis uses adaptive S/T detection based on peak-finding methods and sliding window segmentation.
 
 ## Dataset
-- Source: `ecgPatientData.xlsx`
-- Columns:
-  - Column A: Time (seconds)
-  - Column B: Patient 1 ECG
-  - Column C: Patient 2 ECG
-- Sample size: 75,000 rows per patient
-- Context: Patient 1 appears to be exercising (jogging/running), resulting in faster, tighter peaks. Patient 2 is likely at rest.
+- **File:** `ecgPatientData.xlsx`  
+- **Columns:**
+  - `Time` (seconds)
+  - `ECG Data Patient 1`
+  - `ECG Data Patient 2`
 
-## Methods
-1. ECG data is normalized to ±1 for relative amplitude comparison.
-2. Adaptive R-wave detection identifies S-waves by finding the local minimum immediately after R-peaks.
-3. T-waves are detected as local maxima within 30–300 ms after each S-wave.
-4. The S-T voltage difference is computed as the mean difference between S- and T-wave voltages for each window of 6 seconds with 50% overlap.
-5. Visualization includes the ECG trace with S- and T-wave markers, and the mean S-T voltage difference.
+## Methodology
+1. **Normalization** – Each ECG segment was scaled to ±1 for relative amplitude.  
+2. **Windowing** – Signals were divided into 6-second windows with 50% overlap.  
+3. **Peak Detection**  
+   - **R-wave**: Identified using `scipy.signal.find_peaks` with threshold ≥30% of the local max and minimum spacing of 200 ms.  
+   - **S-wave**: Minimum within 0–60 ms after each R.  
+   - **T-wave**: Maximum within 30–300 ms after each S.  
+4. **S–T Delta** – Computed as the mean difference between S and T amplitudes per window.  
+5. **Visualization** – The first 10 windows were rendered side-by-side for both patients and combined into an animated GIF for review.
 
 ## Results
-- Patient 1: Average S-T voltage difference ≈ 0.268–0.283
-- Patient 2: Average S-T voltage difference ≈ 0.208–0.340
+- **Patient 1**: Mean S–T Δ ranged from **~0.500 to 0.650**  
+- **Patient 2**: Mean S–T Δ ranged from **~0.335 to 0.390**
 
-### Interpretation
-- Patient 1 shows stable S-T segments consistent with exercise-induced repolarization changes.
-- Patient 2 shows more variability in S-T difference, consistent with normal physiological fluctuations at rest.
-- No extreme S-T elevations or depressions were observed.
+## Visualization
+
+![ST Windows GIF](figures/st_windows_side_by_side.gif)
+
+## Conclusions
+- Patient 1 consistently shows a **larger S–T voltage difference**, suggesting more pronounced ventricular repolarization. This may reflect relative **ST elevation** or augmented T-wave amplitude, which can occur with increased myocardial workload or ischemic stress.  
+- Patient 2 demonstrates **smaller and more stable S–T differences**, consistent with more typical repolarization physiology.  
+- The observed ~0.15–0.25 higher S–T difference in Patient 1 relative to Patient 2 may signal **underlying variation in ventricular recovery** dynamics between the two patients.
 
 ## Caveats
-- ECG data is normalized; absolute clinical interpretation requires raw mV calibration.
-- Heart rate, electrode placement, and noise can influence peak detection.
-- Small S-T differences are normal during activity and do not indicate pathology by themselves.
-
-## Usage
-1. Place the dataset in the `data/` folder.
-2. Run the Python script:
-
-```bash
-python scripts/adaptive_ecg_st_peak_analysis.py
+- Only two patients were analyzed — results are not generalizable.  
+- Normalization to ±1 removes absolute voltage context; differences are **relative** rather than clinical voltages in millivolts.  
+- Electrode placement, noise, and filtering could influence peak detection accuracy.  
+- The analysis is **illustrative, not diagnostic** — no clinical outcomes or labels are included.  
