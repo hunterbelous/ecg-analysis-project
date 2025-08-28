@@ -25,7 +25,6 @@ This project analyzes filtered ECG (electrocardiogram) signals from two patients
 - **Patient 2**: Mean S–T Δ ranged from **~0.335 to 0.390**
 
 ## Visualization
-
 ![ST Windows GIF](figures/st_windows_side_by_side.gif)
 
 ## Conclusions
